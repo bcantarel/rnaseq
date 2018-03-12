@@ -13,7 +13,7 @@ before_script:
 stages:
   - integration
 
-test_human
+test_human:
   stage: integration
   script:
     - nextflow run workflow/main.nf --input test_data/ --design ${CLEAN_REPO_PATH}/test_data/design.rnaseq.txt --output ${CLEAN_REPO_PATH}/human_output
@@ -22,7 +22,7 @@ test_human
       - ${CLEAN_REPO_PATH}
     expire_in: 2 days
 
-test_mouse
+test_mouse:
   stage: integration
   script:
     - nextflow run workflow/main.nf --input test_data/ --design ${CLEAN_REPO_PATH}/test_data/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/GRCm38 --markdups null --output ${CLEAN_REPO_PATH}/mouse_output
