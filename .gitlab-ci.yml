@@ -1,0 +1,32 @@
+# Gitlab CI Script for astrocyte/rnaseq
+# Brandi L. Cantarel - 2017
+
+variables:
+  CLEAN_REPO_PATH: "/project/BICF/BICF_Core/s166458/astrocyte_test/${CI_RUNNER_ID}"
+  TEST_BRANCH: "master"
+
+before_script:
+  - module load nextflow/0.27.6
+  - mkdir -p "${CLEAN_REPO_PATH}"
+  - ln -s /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq test_data
+
+stages:
+  - integration
+
+test_human
+  stage: integration
+  script:
+    - nextflow run workflow/main.nf --input test_data/ --design ${CLEAN_REPO_PATH}/test_data/design.rnaseq.txt --output ${CLEAN_REPO_PATH}/human_output
+  artifacts:
+    paths:
+      - ${CLEAN_REPO_PATH}
+    expire_in: 2 days
+
+test_mouse
+  stage: integration
+  script:
+    - nextflow run workflow/main.nf --input test_data/ --design ${CLEAN_REPO_PATH}/test_data/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/GRCm38 --markdups null --output ${CLEAN_REPO_PATH}/mouse_output
+  artifacts:
+    paths:
+      - ${CLEAN_REPO_PATH}
+    expire_in: 2 days
