@@ -7,6 +7,7 @@ variables:
 
 before_script:
   - module load nextflow/0.27.6
+  - ln -s /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq test_data
 
 stages:
   - integration
@@ -14,13 +15,13 @@ stages:
 test_human:
   stage: integration
   script:
-    - nextflow run workflow/main.nf --design test_data/design.rnaseq.txt --input test_data --output human_output
+    - nextflow run workflow/main.nf --design  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/design.rnaseq.txt --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --output human_output
   artifacts:
     expire_in: 2 days
 
 test_mouse:
   stage: integration
   script:
-    - nextflow run workflow/main.nf --input test_data --design test_data/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/GRCm38 --markdups null --output mouse_output
+    - nextflow run workflow/main.nf --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --design /project/shared/bicf_workflow_ref/workflow_testdata/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/GRCm38 --markdups null --output mouse_output
   artifacts:
     expire_in: 2 days
