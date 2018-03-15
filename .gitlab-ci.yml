@@ -7,7 +7,6 @@ variables:
 
 before_script:
   - module load nextflow/0.27.6
-  - ln -s /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq test_data
 
 stages:
   - integration
