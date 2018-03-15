@@ -2,16 +2,12 @@
 # Brandi L. Cantarel - 2017
 
 variables:
-  RUNDIR: "/project/BICF/BICF_Core/shared/astrocyte_test_ci/rnaseq_test"
   TEST_BRANCH: "master"
   GIT_SUBMODULE_STATEGY: recursive
 
 before_script:
   - module load nextflow/0.27.6
-  - mkdir -p "${RUNDIR}"
-  - ln -s /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/* ${RUNDIR}/test_data/
-  - echo $RUNDIR
-  - ls -l ${RUNDIR}/test_data/
+  - ln -s /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq test_data
 
 stages:
   - integration
@@ -19,17 +15,13 @@ stages:
 test_human:
   stage: integration
   script:
-    - nextflow run workflow/main.nf --design ${RUNDIR}/test_data/design.rnaseq.txt --input ${RUNDIR}/test_data --output ${RUNDIR}/human_output
+    - nextflow run workflow/main.nf --design test_data/design.rnaseq.txt --input test_data --output human_output
   artifacts:
-    paths:
-      - ${RUNDIR}
     expire_in: 2 days
 
 test_mouse:
   stage: integration
   script:
-    - nextflow run workflow/main.nf --input ${RUNDIR}/test_data --design ${RUNDIR}/test_data/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/GRCm38 --markdups null --output ${RUNDIR}/mouse_output
+    - nextflow run workflow/main.nf --input test_data --design test_data/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/GRCm38 --markdups null --output mouse_output
   artifacts:
-    paths:
-      - ${RUNDIR}
     expire_in: 2 days
