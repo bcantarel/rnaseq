@@ -4,12 +4,14 @@
 variables:
   RUNDIR: "/project/BICF/BICF_Core/shared/astrocyte_test_ci/rnaseq_test"
   TEST_BRANCH: "master"
+  GIT_SUBMODULE_STATEGY: recursive
 
 before_script:
   - module load nextflow/0.27.6
   - mkdir -p "${RUNDIR}"
+  - ln -s /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/* ${RUNDIR}/test_data/
   - echo $RUNDIR
-  - ln -s /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq ${RUNDIR}/test_data
+  - ls -l ${RUNDIR}/test_data/
 
 stages:
   - integration
