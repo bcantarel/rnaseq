@@ -227,7 +227,7 @@ process gatkbam {
   publishDir "$params.output", mode: 'copy'
 
   input:
-  set subjid,pair_id, file(rbam) from deduped2
+  set pair_id, file(rbam) from deduped2
 
   output:
   set file("${pair_id}.final.bam"),file("${pair_id}.final.bai") into gatkbam
