@@ -2,11 +2,11 @@
 # Brandi L. Cantarel - 2017
 
 variables:
-  TEST_BRANCH: "master"
-  GIT_SUBMODULE_STATEGY: recursive
+  GIT_SUBMODULE_STRATEGY: recursive
 
 before_script:
   - module load nextflow/0.27.6
+  - git submodule sync --recursive
 
 stages:
   - integration
