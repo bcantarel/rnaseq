@@ -6,6 +6,7 @@ variables:
 
 before_script:
   - module load nextflow/0.27.6
+  - git submodule update --init --recursive
   - git submodule sync --recursive
 
 stages:
