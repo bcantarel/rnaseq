@@ -15,13 +15,13 @@ stages:
 test_human:
   stage: integration
   script:
-    - nextflow run workflow/main.nf --design  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/design.rnaseq.txt --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --output human_output
+    - nextflow run -with-report human_report.html workflow/main.nf --design  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/design.rnaseq.txt --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --output human_output
   artifacts:
     expire_in: 2 days
 
 test_mouse:
   stage: integration
   script:
-    - nextflow run workflow/main.nf --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --design /project/shared/bicf_workflow_ref/workflow_testdata/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/GRCm38 --markdups null --output mouse_output
+    - nextflow run -with-report mouse_report.html  workflow/main.nf --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --design /project/shared/bicf_workflow_ref/workflow_testdata/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/GRCm38 --markdups null --output mouse_output
   artifacts:
     expire_in: 2 days
