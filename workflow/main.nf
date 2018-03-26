@@ -64,7 +64,7 @@ else {
 spltnames
  .splitCsv()
  .filter { fileMap.get(it[1]) != null }
- .map { it -> tuple(it[0], fileMap.get(it[1]),fileMap.get(it[1])) }
+ .map { it -> tuple(it[0], fileMap.get(it[1]),'') }
  .set { read }
 }
 if( ! read ) { error "Didn't match any input files with entries in the design file" }
@@ -232,7 +232,7 @@ process gatkbam {
   output:
   set file("${pair_id}.final.bam"),file("${pair_id}.final.bai") into gatkbam
   when:
-  params.align == 'hisat'
+  params.align == 'hisat' && $index_path == '/project/shared/bicf_workflow_ref/GRCh38/'
   script:
   """
   bash $baseDir/process_scripts/variants/gatkrunner.sh -a gatkbam_rna -b $rbam -r ${index_path}/hisat_index -p $pair_id
