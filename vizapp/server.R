@@ -10,8 +10,8 @@ library("gplots")
 
 shinyServer(function(input, output, session) {
 
-   # data.dir <- Sys.getenv('outputDir')
-    data.dir <-"workflow_322_output"
+    data.dir <- Sys.getenv('outputDir')
+    #data.dir <-"workflow_322_output"
     rda.dir <- data.dir
     symsyn <- read.table(file='symbol2synonym.txt',header=FALSE)
     names(symsyn) <- c('symbol','synonyms')

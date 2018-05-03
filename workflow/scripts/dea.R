@@ -43,8 +43,8 @@ dds <- dds[ rowMax(counts(dds)) > 30, ]
 dds <- dds[ colSums(counts(dds)) > 1000000]
 
 if (nrow(counts(dds)) < 1) {
-print(paste("Samples are filtered if there is < 1M reads.  There are less than no remaining sample(s) after this filter",sep=' '))
-q()
+  print(paste("Samples are filtered if there is < 1M reads.  There are less than no remaining sample(s) after this filter",sep=' '))
+  q()
 }
 
 countTable <- counts(dds)
@@ -66,11 +66,12 @@ rld <- rlogTransformation(dds, blind=TRUE)
 sampleDists <- dist(t(assay(rld)))
 
 png(file="samples_heatmap.png",bg ="transparent",height=768,width=1024)
-heatmap.2(as.matrix(sampleDists), col = bluered(100),RowSideColors = col.blocks,srtRow=45,srtCol=45,trace="none", margins=c(5, 5))
+par(mar=c(7,4,4,2)+0.1) 
+heatmap.2(as.matrix(sampleDists), col = bluered(100),RowSideColors = col.blocks,srtRow=45,srtCol=45,trace="none", margins=c(8,8), cexRow = 1.5, cexCol = 1.5)
 dev.off()
 
 #Compare Samples using PCA
-png(file="pca.png",bg ="transparent",height=768,width=1024)
+png(file="pca.png",bg ="transparent",height=768,width=1024,res = 150)
 print(plotPCA(rld, intgroup="SampleGroup"),col.hab=col.blocks)
 dev.off()
 
@@ -93,23 +94,23 @@ for (i in 1:a) {
       write.table(output,file=paste(cond[i],'_',cond[j],'.deseq2.txt',sep=""),quote=FALSE,row.names=FALSE,sep='\t')
       filt.out <- na.omit(output[output$fdr < 0.05,])
       if (nrow(filt.out) > 2) {
-      	 subset <- logcpm[row.names(logcpm) %in% filt.out$symbol,]
-      	 gnames <- filt.out[c('ensembl','symbol')]
-      	 s <- merge(gnames,subset,by.x="ensembl",by.y="row.names",all.x=FALSE,all.y=TRUE,sort=FALSE)
-      	 STREE <- hclust(dist(t(subset)))
-      	 zscores <- scale(t(subset))
-      	 ngenes <- length(colnames(zscores))
-      	 textscale <- (1/(ngenes/30))
-      	 if (textscale > 1) {
-            textscale <-1
-      	 }
-      	 if (textscale < 0.1) {
-            textscale <- 0.1
-      	 }
-      	 png(file=paste(cond[i],'_',cond[j],'.heatmap.deseq2.png',sep=""),height=768,width=1024)
-      	 heatmap.2(zscores, col = bluered(100),Rowv = as.dendrogram(STREE), RowSideColors = col.blocks,dendrogram='row', cexCol=textscale,labCol=s$symbol,srtRow=45,srtCol=45,trace="none", margins=c(5, 5))
-      	 legend("topright",legend=grpnames,col=rainbow(length(grpnames)),pch=20,cex=0.5)
-      	 dev.off()
+        subset <- logcpm[row.names(logcpm) %in% filt.out$symbol,]
+        gnames <- filt.out[c('ensembl','symbol')]
+        s <- merge(gnames,subset,by.x="ensembl",by.y="row.names",all.x=FALSE,all.y=TRUE,sort=FALSE)
+        STREE <- hclust(dist(t(subset)))
+        zscores <- scale(t(subset))
+        ngenes <- length(colnames(zscores))
+        textscale <- (1/(ngenes/30))
+        if (textscale > 1) {
+          textscale <-1
+        }
+        if (textscale < 0.1) {
+          textscale <- 0.1
+        }
+        png(file=paste(cond[i],'_',cond[j],'.heatmap.deseq2.png',sep=""),height=768,width=1024)
+        heatmap.2(zscores, col = bluered(100),Rowv = as.dendrogram(STREE), RowSideColors = col.blocks,dendrogram='row', cexCol=textscale,labCol=s$symbol,srtRow=45,srtCol=45,trace="none", margins=c(5, 5))
+        legend("topright",legend=grpnames,col=rainbow(length(grpnames)),pch=20,cex=0.5)
+        dev.off()
       }
     }
   }
@@ -125,7 +126,8 @@ d <- DGEList(counts=countTable,group=grps,lib.size=libSizes)
 d <- calcNormFactors(d)
 d <- estimateCommonDisp(d)
 png(file="mds.png",bg ="transparent",height=768,width=1024)
-plotMDS(d, labels=grps,col=col.blocks)
+plotMDS(d, labels=grps,col=col.blocks, cex.axis=1.5, cex.lab=1.5, cex=1.5)
+op <- par(cex = 1.5)
 legend("topleft",legend=grpnames,col=rainbow(length(grpnames)),pch=20)
 dev.off()
 cond <-levels(d$samples$group)
@@ -147,28 +149,28 @@ for (i in 1:a) {
       write.table(output,file=paste(cond[i],'_',cond[j],'.edgeR.txt',sep=""),quote=FALSE,row.names=FALSE,sep='\t')
       filt.out <- na.omit(output[output$fdr < 0.05,])
       if (nrow(filt.out) > 2) {
-      subset <- logcpm[row.names(logcpm) %in% filt.out$symbol,]
-      gnames <- filt.out[c('ensembl','symbol')]
-      s <- merge(gnames,subset,by.x="ensembl",by.y="row.names",all.x=FALSE,all.y=TRUE,sort=FALSE)
-      STREE <- hclust(dist(t(subset)))
-      zscores <- scale(t(subset))
-      ngenes <- length(colnames(zscores))
-      textscale <- (1/(ngenes/30))
-      if (textscale > 1) {
-        textscale <-1
+        subset <- logcpm[row.names(logcpm) %in% filt.out$symbol,]
+        gnames <- filt.out[c('ensembl','symbol')]
+        s <- merge(gnames,subset,by.x="ensembl",by.y="row.names",all.x=FALSE,all.y=TRUE,sort=FALSE)
+        STREE <- hclust(dist(t(subset)))
+        zscores <- scale(t(subset))
+        ngenes <- length(colnames(zscores))
+        textscale <- (1/(ngenes/30))
+        if (textscale > 1) {
+          textscale <-1
+        }
+        if (textscale < 0.1) {
+          textscale <- 0.1
+        }
+        png(file=paste(cond[i],'_',cond[j],'.heatmap.edgeR.png',sep=""),height=768,width=1024)
+        heatmap.2(zscores, col = bluered(100),Rowv = as.dendrogram(STREE), RowSideColors = col.blocks,dendrogram='row', cexCol=textscale,labCol=s$symbol,srtRow=45,srtCol=45,trace="none", margins=c(5, 8))
+        legend("topright",legend=grpnames,col=rainbow(length(grpnames)),pch=20,cex=1.5)
+        dev.off()
+        gcont <- paste(cond[j],cond[i],sep='-')
+        qs.results = qusage(logcpm, grps,gcont,MSIG.geneSets)
+        save(qs.results,file=paste(cond[i],'_',cond[j],'.qusage.rda',sep=""))
       }
-      if (textscale < 0.1) {
-        textscale <- 0.1
-      }
-      png(file=paste(cond[i],'_',cond[j],'.heatmap.edgeR.png',sep=""),height=768,width=1024)
-      heatmap.2(zscores, col = bluered(100),Rowv = as.dendrogram(STREE), RowSideColors = col.blocks,dendrogram='row', cexCol=textscale,labCol=s$symbol,srtRow=45,srtCol=45,trace="none", margins=c(5, 5))
-      legend("topright",legend=grpnames,col=rainbow(length(grpnames)),pch=20,cex=0.5)
-      dev.off()
-      gcont <- paste(cond[j],cond[i],sep='-')
-      qs.results = qusage(logcpm, grps,gcont,MSIG.geneSets)
-      save(qs.results,file=paste(cond[i],'_',cond[j],'.qusage.rda',sep=""))
-      }
-      }
+    }
   }
 }
 
@@ -232,5 +234,6 @@ for (i in 1:a) {
 #   dev.off()
 #   }
 # }
+
 
 
