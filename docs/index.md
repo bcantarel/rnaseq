@@ -30,7 +30,8 @@ For each file this workflow:
 
     SampleID
         This ID should match the name in the fastq file ie S0001.R1.fastq.gz the sample ID is S0001
-        Note: SampleID shouldn't start with numbers ie 10C should be changed to S10C
+        Notes: SampleID shouldn't start with numbers ie 10C should be changed to S10C
+               SampleID should contain only alphanumeric characters ie the '_', '.', and '-' characters should be removed from "treated_sample.1-1"
     SampleName
         This ID can be the identifier of the researcher or clinician
     SubjectID
