@@ -200,7 +200,6 @@ process statanal {
    output:
   file "*.txt" into txtfiles
   file "*.png" into psfiles
-  file "*"
   file("bg.rda") into rdafiles
   when:
   script:
@@ -209,6 +208,7 @@ process statanal {
   perl $baseDir/scripts/concat_cts.pl -o ./ *.cts
   perl $baseDir/scripts/concat_fpkm.pl -o ./ *.fpkm.txt
   touch empty.png
+  touch bg.rda
   """
   else
   """
