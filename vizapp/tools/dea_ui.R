@@ -36,7 +36,7 @@ output$ui_dea <- renderUI({
         conditionalPanel(condition = "input.heatmap == 'hgeneset'",
                          uiOutput("pick.pathway")),
         radioButtons("cluster", label = "Cluster",
-                     choices = list("Display Cluster" = 1, "Hide Cluster" = 2), 
+                     choices = list("Display" = 1, "Hide" = 2), 
                      selected = 1),
         actionButton("deButton", "Go", class = "btn btn-primary btn-bg centerbtn")
       ),

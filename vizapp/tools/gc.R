@@ -16,22 +16,22 @@ get.ct <- function(var) {
   bx <-
     paste(
       "Relative Abudance of",
-      input$symsearch,
+      input$gc_symsearch,
       "calculated by Log2(Counts Per Million Reads).  Boxplots draw to represent the 25th and 75th percentile (the lower and upper quartiles, respectively) as a box with a band in the box representing 50th percentile (the median). The upper whisker is located at the 'smaller' of the maximum x value and Q_3 + 1.5 inner quantile range(IRQ), whereas the lower whisker is located at the 'larger' of the smallest x value and Q_1 - 1.5 IQR",
       sep = ' '
     )
   vio <- paste(
-      "Relative Abudance of",
-      input$symsearch,
-      input$enssearch,
-      "calculated by Log2(Counts Per Million Reads).  Violin plot is similar to box plots above, except that it also show the kernel probability density of the data at different value. Violin plots include a marker for the median of the data and a box indicating the interquartile range, as in boxplot above.",
-      sep = ' '
-    )
-  if (nchar(as.vector(var$symsearch)) > 2) {
+    "Relative Abudance of",
+    input$gc_symsearch,
+    input$gc_enssearch,
+    "calculated by Log2(Counts Per Million Reads).  Violin plot is similar to box plots above, except that it also show the kernel probability density of the data at different value. Violin plots include a marker for the median of the data and a box indicating the interquartile range, as in boxplot above.",
+    sep = ' '
+  )
+  if (nchar(as.vector(var$gc_symsearch)) > 2) {
     cts <-
       read.csv.sql(
         ctfile,
-        sql = paste("select * from file where symbol ='", var$symsearch, "'", sep =
+        sql = paste("select * from file where symbol ='", var$gc_symsearch, "'", sep =
                       ''),
         sep = "\t"
       )
@@ -41,7 +41,7 @@ get.ct <- function(var) {
           statfile,
           sql = paste(
             "select * from file where symbol ='",
-            var$symsearch,
+            var$gc_symsearch,
             "'",
             sep = ''
           ),
@@ -50,13 +50,13 @@ get.ct <- function(var) {
     }
   }
   else {
-    if (nchar(as.vector(var$enssearch)) > 2) {
+    if (nchar(as.vector(var$gc_enssearch)) > 2) {
       cts <-
         read.csv.sql(
           ctfile,
           sql = paste(
             "select * from file where ENSEMBL ='",
-            var$enssearch,
+            var$gc_enssearch,
             "'",
             sep = ''
           ),
@@ -68,7 +68,7 @@ get.ct <- function(var) {
             statfile,
             sql = paste(
               "select * from file where ENSEMBL ='",
-              var$enssearch,
+              var$gc_enssearch,
               "'",
               sep = ''
             ),
@@ -109,30 +109,23 @@ output$plot.gene <- renderPlot({
   countTable <- forct()$ctable
   par(oma = c(4, 4, 1, 1))
   grpnames <- levels(factor(as.character(countTable$grp)))
-  #boxplot(
-  # countTable$cts ~ countTable$grp,
-  # col = rainbow(length(grpnames)),
-  #cex.axis = 0.7,
-  # ylab = 'Relative Abundance (logCPM)',
-  # las = 1,
-  # main = input$groupname
-  # )
-  p <-
-    ggplot(countTable, aes(x = grp, y = cts))  + ggtitle(input$groupname) +
-    theme(plot.title = element_text(
-      hjust = 0.5,
-      size = 18,
-      margin = margin(b = 20, unit = "pt")
-    ))  + geom_boxplot(trim = FALSE, aes(fill = factor(grp))) + theme(legend.position =
-                                                                        "none",
-                                                                      axis.title.y = element_text(size=14), 
-                                                                      axis.text.y = element_text(size=14), 
-                                                                      axis.text.x = element_text(
-                                                                        angle = 45,
-                                                                        hjust = 1,
-                                                                        vjust = 1,
-                                                                        size=14
-                                                                      )) + ylab("Relative Abundance (logCPM)") + xlab("")
+  p <- ggplot(countTable, aes(x = grp, y = cts))  + ggtitle(input$groupname) + theme_bw() +
+       theme(plot.title = element_text(
+             hjust = 0.5,
+             size = 18,
+             margin = margin(b = 20, unit = "pt")
+    ))  + geom_boxplot(trim = FALSE, aes(fill = factor(grp))) + 
+         theme(
+           legend.position = "none",
+           axis.title.y = element_text(size =14),
+           axis.text.y = element_text(size =14),
+           axis.text.x = element_text(
+             angle = 45,
+             hjust = 1,
+             vjust = 1,
+             size =14
+           )
+         ) + ylab("Relative Abundance (logCPM)") + xlab("")
   print(p)
 }, height = "auto", width = 'auto')
 
@@ -159,20 +152,19 @@ output$Downloadbp <- downloadHandler(
     countTable <- forct()$ctable
     par(oma = c(4, 4, 1, 1))
     grpnames <- levels(factor(as.character(countTable$grp)))
-    plot <-
-      ggplot(countTable, aes(x = grp, y = cts))  + ggtitle(input$groupname) +
-      theme(plot.title = element_text(
-        hjust = 0.5,
-        size = 18,
-        margin = margin(b = 20, unit = "pt")
-      ))  + geom_boxplot(trim = FALSE, aes(fill = factor(grp))) + theme(legend.position =
-                                                                          "none",
-                                                                        axis.text.x = element_text(
-                                                                          angle = 45,
-                                                                          hjust = 1,
-                                                                          vjust = 1
-                                                                        )) + ylab("Relative Abundance (logCPM)") + xlab("")
-    print(plot)
+    plot <- ggplot(countTable, aes(x = grp, y = cts))  + ggtitle(input$groupname) + theme_bw() +
+            theme(plot.title = element_text(
+                  hjust = 0.5,
+                  size = 18,
+                  margin = margin(b = 20, unit = "pt")
+                 ))  + geom_boxplot(trim = FALSE, aes(fill = factor(grp))) +
+              theme(legend.position = "none",
+                    axis.text.x = element_text(
+                      angle = 45,
+                      hjust = 1,
+                      vjust = 1
+                    )) + ylab("Relative Abundance (logCPM)") + xlab("")
+            print(plot)
     dev.off()
   },
   contentType = "image/png"
@@ -185,17 +177,17 @@ output$bxplot.desc <- renderText({
 output$violin.gene <- renderPlot({
   countTable <- forct()$ctable
   par(oma = c(4, 4, 1, 1))
-  p <-
-    ggplot(countTable, aes(x = grp, y = cts)) + geom_violin(trim = FALSE, aes(fill = factor(grp))) + geom_jitter(height = 0) + theme(legend.position =
-                                                                                                                                       "none",
-                                                                                                                                     axis.title.y = element_text(size=14), 
-                                                                                                                                     axis.text.y = element_text(size=14), 
-                                                                                                                                     axis.text.x = element_text(
-                                                                                                                                       angle = 45,
-                                                                                                                                       hjust = 1,
-                                                                                                                                       vjust = 1,
-                                                                                                                                       size = 14
-                                                                                                                                     )) + ylab("Relative Abundance (logCPM)") + xlab("")
+  p <- ggplot(countTable, aes(x = grp, y = cts)) + geom_violin(trim = FALSE, aes(fill = factor(grp))) + theme_bw() + 
+    geom_jitter(height = 0) + theme(legend.position = "none",
+                                    axis.title.y = element_text(size =14),
+                                    axis.text.y = element_text(size =14),
+                                    axis.text.x = element_text(
+                                                    angle = 45,
+                                                    hjust = 1,
+                                                    vjust = 1,
+                                                    size = 14
+                                                  )
+                                  ) + ylab("Relative Abundance (logCPM)") + xlab("")
   print(p)
 }, height = "auto", width = 'auto')
 
@@ -224,14 +216,14 @@ output$Downloadvp <- downloadHandler(
     par(oma = c(4, 4, 1, 1))
     grpnames <- levels(factor(as.character(countTable$grp)))
     par(oma = c(4, 4, 1, 1))
-    plot <-
-      ggplot(countTable, aes(x = grp, y = cts)) + geom_violin(trim = FALSE, aes(fill = factor(grp))) + geom_jitter(height = 0) + theme(legend.position =
-                                                                                                                                         "none",
-                                                                                                                                       axis.text.x = element_text(
-                                                                                                                                         angle = 45,
-                                                                                                                                         hjust = 1,
-                                                                                                                                         vjust = 1
-                                                                                                                                       )) + ylab("Relative Abundance (logCPM)") + xlab("")
+    plot <- ggplot(countTable, aes(x = grp, y = cts)) + geom_violin(trim = FALSE, aes(fill = factor(grp))) + 
+      geom_jitter(height = 0) + theme_bw() +
+      theme(legend.position = "none",
+            axis.text.x = element_text(
+              angle = 45,
+              hjust = 1,
+              vjust = 1
+            )) + ylab("Relative Abundance (logCPM)") + xlab("")
     print(plot)
     dev.off()
   },

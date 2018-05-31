@@ -22,7 +22,7 @@ MSIG.geneSets <-
 
 output$pick.dea <- renderUI({
   flist <- list.files(data.dir, pattern = "*edgeR.txt$")
-  selectInput("file", "Choose Pair", choices=flist, width = "100%")
+  selectInput("file", "Choose Pair", choices=flist, width = "800px")
 })
 output$pick.pathway <- renderUI({
   pathways <- names(MSIG.geneSets)
@@ -66,15 +66,15 @@ get.data <- function(var) {
       f1 = f1,
       hmcomp = hmcomp,
       top50 = top50,
-      allgene = allgene
+      allgene = allgene,
+      cluster=input$cluster
     )
   )
 }
 
-tbls <-  eventReactive(input$deButton,
-                       {
-                         get.data(input)
-                       })
+tbls <-  eventReactive(input$deButton,{
+          get.data(input)
+})
 
 output$selectgenes <- renderUI({
   symnames <- tbls()$glist
@@ -147,7 +147,7 @@ plotHeatmap <- reactive({
   if (textscale < 0.1) {
     textscale <- 12
   }
-  if (input$cluster == 2) {
+  if (tbls()$cluster == 2) {
     heatmap.2(
       zscores,
       col = bluered(100),
@@ -222,7 +222,7 @@ output$Downloadhp <- downloadHandler(
     if (textscale < 0.1) {
       textscale <- 12
     }
-    if (input$cluster == 2) {
+    if (tbls()$cluster == 2) {
       plot <- heatmap.2(
         zscores,
         col = bluered(100),

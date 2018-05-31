@@ -4,8 +4,8 @@ output$ui_gc <- renderUI({
     fluidRow(
       sidebarPanel(
         uiOutput("pick.group"),
-        textInput("symsearch", "Search By Gene Symbol", 'IL1B'),
-        textInput("enssearch", "Search By ENS ID", ''),
+        textInput("gc_symsearch", "Search By Gene Symbol", 'IL1B'),
+        textInput("gc_enssearch", "Search By ENS ID", ''),
         actionButton("gcButton", "GO", class = "btn btn-primary btn-bg centerbtn")
       ),
       column(7,

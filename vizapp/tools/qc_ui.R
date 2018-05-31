@@ -4,7 +4,7 @@ output$ui_qc <- renderUI({
     fluidRow(
       sidebarPanel(
         uiOutput("dir.qc"),
-        p("Click it to load data"),
+        p("Click to load data"),
         actionButton("qcButton", "GO",  class = "btn btn-primary btn-bg centerbtn")
       ),
       column(7,

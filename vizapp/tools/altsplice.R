@@ -228,7 +228,9 @@ output$trx.gene <- renderPlot({
   countTable <- getgeneid()$cttbl
   par(oma = c(4, 1, 4, 1))
   p <-
-    ggplot(countTable, aes(x = grptrx, y = log2(value + 1))) + geom_boxplot(aes(fill = factor(grptrx))) + geom_jitter(height = 0) + theme(
+    ggplot(countTable, aes(x = grptrx, y = log2(value + 1))) + geom_boxplot(aes(fill = factor(grptrx))) + 
+    geom_jitter(height = 0) + theme_bw() +
+    theme(
       legend.position = "left",
       axis.text.x = element_text(
         angle = 45,
@@ -266,7 +268,9 @@ output$Downloadtregene <- downloadHandler(
     countTable <- getgeneid()$cttbl
     par(oma = c(4, 1, 4, 1))
     p <-
-      ggplot(countTable, aes(x = grptrx, y = log2(value + 1))) + geom_boxplot(aes(fill = factor(grptrx))) + geom_jitter(height = 0) + theme(
+      ggplot(countTable, aes(x = grptrx, y = log2(value + 1))) + geom_boxplot(aes(fill = factor(grptrx))) + 
+      geom_jitter(height = 0) + theme_bw() +
+      theme(
         legend.position = "left",
         axis.text.x = element_text(
           angle = 45,
