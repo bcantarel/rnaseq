@@ -26,13 +26,18 @@ shinyUI(list(
       uiOutput('ui_gsea')
     )
   ),
-  fluidRow(style = "margin-top:40px", tags$footer(class = "footer",
-                                                  div(class = "container",
-                                                      style = "padding-bottom:0; margin-bottom:0",
-                                                        p(icon("envelope", lib = "glyphicon"),
-                                                          "brandi.cantarel@utsouthwestern.edu  |  @ UT Southwestern Medical Center",
-                                                           style = "margin-bottom:-40px;")
-                                                      )
-                                                  )
-           )
+  fluidRow(class = "ftrow",
+           style = "margin-top:40px; margin-left:0",
+           tags$footer(
+             class = "footer",
+             div(
+               class = "container",
+               style = "padding-bottom:0; margin-bottom:0",
+               p(
+                 icon("envelope", lib = "glyphicon"),
+                 "brandi.cantarel@utsouthwestern.edu  |  @ UT Southwestern Medical Center",
+                 style = "margin-bottom:-40px;"
+               )
+             )
+           ))
 ))
