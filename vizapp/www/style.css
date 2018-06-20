@@ -26,13 +26,20 @@ label.checkbox  {
 }
 
 select { 
-  max-width: 200px; 
+  max-width: 300px; 
 }
 
 .selectize-input { 
-  max-width: 200px; 
+  max-width: 350px; 
+  padding: 6px 5px;
 }
-
+.selectize-control.single .selectize-input:after{
+  border-style: none;
+  border-color: transparent;
+}
+.selectize-dropdown [data-selectable], .selectize-dropdown .optgroup-header {
+    padding: 3px 5px;
+}
 pre {
   overflow: auto;
   word-wrap: normal;
