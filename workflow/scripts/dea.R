@@ -94,6 +94,7 @@ for (i in 1:a) {
       filt.out <- na.omit(output[output$fdr < 0.05,])
       if (nrow(filt.out) > 2) {
       	 subset <- logcpm[row.names(logcpm) %in% filt.out$symbol,]
+	 subset <- subset[!apply(subset, 1, function(x) {any(x == 0)}),]
       	 gnames <- filt.out[c('ensembl','symbol')]
       	 s <- merge(gnames,subset,by.x="ensembl",by.y="row.names",all.x=FALSE,all.y=TRUE,sort=FALSE)
       	 STREE <- hclust(dist(t(subset)))
@@ -148,6 +149,7 @@ for (i in 1:a) {
       filt.out <- na.omit(output[output$fdr < 0.05,])
       if (nrow(filt.out) > 2) {
       subset <- logcpm[row.names(logcpm) %in% filt.out$symbol,]
+      subset <- subset[!apply(subset, 1, function(x) {any(x == 0)}),]
       gnames <- filt.out[c('ensembl','symbol')]
       s <- merge(gnames,subset,by.x="ensembl",by.y="row.names",all.x=FALSE,all.y=TRUE,sort=FALSE)
       STREE <- hclust(dist(t(subset)))
