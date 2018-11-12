@@ -205,6 +205,7 @@ process statanal {
   when:
   script:
   if (params.dea == 'skip')
+  """
   perl $baseDir/scripts/concat_cts.pl -o ./ *.cts
   perl $baseDir/scripts/concat_fpkm.pl -o ./ *.fpkm.txt
   touch empty.png
