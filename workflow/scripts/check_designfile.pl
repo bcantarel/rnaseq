@@ -38,6 +38,7 @@ while (my $line = <DFILE>) {
     my %hash;
     foreach my $i (0..$#row) {
 	next unless ($newcols{$colnames[$i]});
+	$row[$i] =~ s/-//g unless ($colnames[$i] =~ m/Fq/);
 	$hash{$colnames[$i]} = $row[$i];
     }
     if ($hash{SampleID} =~ m/^\d/) {
@@ -51,7 +52,7 @@ while (my $line = <DFILE>) {
 	$j = $lnct %% 2;
 	$hash{SampleGroup} = $grp[$j];
     }
-    $hash{SampleGroup} =~ s/_/./g;
+    $hash{SampleGroup} =~ s/_//g;
     my @line;
     foreach $f (@cols) {
 	push @line, $hash{$f};
