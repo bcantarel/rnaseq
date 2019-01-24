@@ -43,8 +43,8 @@ dds <- dds[ rowMax(counts(dds)) > 30, ]
 dds <- dds[ colSums(counts(dds)) > 1000000]
 
 if (nrow(counts(dds)) < 1) {
-print(paste("Samples are filtered if there is < 1M reads.  There are less than no remaining sample(s) after this filter",sep=' '))
-q()
+  print(paste("Samples are filtered if there is < 1M reads.  There are less than no remaining sample(s) after this filter",sep=' '))
+  q()
 }
 
 countTable <- counts(dds)
@@ -65,12 +65,13 @@ dds <- DESeq(dds)
 rld <- rlogTransformation(dds, blind=TRUE)
 sampleDists <- dist(t(assay(rld)))
 
-png(file="samples_heatmap.png",bg ="transparent",height=768,width=1024)
-heatmap.2(as.matrix(sampleDists), col = bluered(100),RowSideColors = col.blocks,srtRow=45,srtCol=45,trace="none", margins=c(5, 5))
+png(file="samples_heatmap.png",bg ="white",height=768,width=1024)
+par(mar=c(7,4,4,2)+0.1) 
+heatmap.2(as.matrix(sampleDists), col = bluered(100),RowSideColors = col.blocks,srtRow=45,srtCol=45,trace="none", margins=c(8,8), cexRow = 1.5, cexCol = 1.5)
 dev.off()
 
 #Compare Samples using PCA
-png(file="pca.png",bg ="transparent",height=768,width=1024)
+png(file="pca.png",bg ="white",height=768,width=1024)
 print(plotPCA(rld, intgroup="SampleGroup"),col.hab=col.blocks)
 dev.off()
 
@@ -125,8 +126,9 @@ design <- model.matrix(~grps)
 d <- DGEList(counts=countTable,group=grps,lib.size=libSizes)
 d <- calcNormFactors(d)
 d <- estimateCommonDisp(d)
-png(file="mds.png",bg ="transparent",height=768,width=1024)
-plotMDS(d, labels=grps,col=col.blocks)
+png(file="mds.png",bg ="white",height=768,width=1024)
+plotMDS(d, labels=grps,col=col.blocks, cex.axis=1.5, cex.lab=1.5, cex=1.5)
+op <- par(cex = 1.5)
 legend("topleft",legend=grpnames,col=rainbow(length(grpnames)),pch=20)
 dev.off()
 cond <-levels(d$samples$group)
@@ -171,6 +173,7 @@ for (i in 1:a) {
       save(qs.results,file=paste(cond[i],'_',cond[j],'.qusage.rda',sep=""))
       }
       }
+    }
   }
 }
 
@@ -234,5 +237,6 @@ for (i in 1:a) {
 #   dev.off()
 #   }
 # }
+
 
 

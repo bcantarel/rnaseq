@@ -1,14 +1,43 @@
 library(shiny)
-
-shinyUI(navbarPage("RNASeq Analysis",
-                   id = "nav_shinyapp", inverse = TRUE, collapsible = TRUE,
-                   tabPanel("Introduction",uiOutput('ui_intro')),
-		   tabPanel("Dataset QC", uiOutput('ui_qc')),
-                   #tabPanel("Sample Sequencing QC", uiOutput('ui_fastqc')),
-		   tabPanel("Gene Compare", uiOutput('ui_gc')),
-                   tabPanel("Gene Alt Splicing", uiOutput('ui_altsplice')),
-                   tabPanel("DEA", uiOutput('ui_dea')),
-                   tabPanel("QuSAGE", uiOutput('ui_gsea'))
-                   ))
-
-
+library(shinythemes)
+shinyUI(list(
+  navbarPage(
+    title = "RNASeq Analysis",
+    id = "nav_shinyapp",
+    inverse = TRUE,
+    collapsible = TRUE,
+    theme = shinytheme("yeti"),
+    
+    tabPanel("Introduction", uiOutput('ui_intro')),
+    tabPanel("Dataset QC", uiOutput('ui_qc')),
+    #tabPanel("Sample Sequencing QC", uiOutput('ui_fastqc')),
+    tabPanel(
+      "Gene Compare",
+      id = "panelgc",
+      value = "panelgc",
+      uiOutput('ui_gc')
+    ),
+    tabPanel("Gene Alt Splicing", uiOutput('ui_altsplice')),
+    tabPanel("DEA", id = "paneldea", value = "paneldea", uiOutput('ui_dea')),
+    tabPanel(
+      "QuSAGE",
+      id = "panelgsea",
+      value = "panelgsea",
+      uiOutput('ui_gsea')
+    )
+  ),
+  fluidRow(class = "ftrow",
+           style = "margin-top:40px; margin-left:0",
+           tags$footer(
+             class = "footer",
+             div(
+               class = "container",
+               style = "padding-bottom:0; margin-bottom:0",
+               p(
+                 icon("envelope", lib = "glyphicon"),
+                 "brandi.cantarel@utsouthwestern.edu  |  @ UT Southwestern Medical Center",
+                 style = "margin-bottom:-40px;"
+               )
+             )
+           ))
+))
