@@ -12,21 +12,11 @@ output$ui_gc <- renderUI({
              tabsetPanel(
                tabPanel(
                  "Gene Compare",
-                 dataTableOutput('gc.stats'),
-                 br(),
                  plotOutput("plot.gene"),
-                 uiOutput('dlboxplot'),
-                 br(),
-                 textOutput("bxplot.desc"),
-                 br(),
-                 plotOutput("violin.gene"),
-                 uiOutput('dlviolinplot'),
-                 br(),
-                 textOutput("violin.desc")
+                 uiOutput('dlboxplot')
                )
              )),
-      tags$style(type='text/css', "#dlboxplot { width:100%;margin-left: 35px;}"),
-      tags$style(type='text/css', "#dlviolinplot { width:100%;margin-left: 35px;}")
+      tags$style(type='text/css', "#dlboxplot { width:100%;margin-left: 35px;}")
     )
   ))
   

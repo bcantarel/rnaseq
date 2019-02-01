@@ -4,9 +4,11 @@ library(qusage)
 library(DT)
 library(ggplot2)
 library(ballgown)
-library(sqldf)
+library(tidyverse)
 library(reshape2)
 library("gplots")
+library(gridExtra)
+library(grid)
 
 shinyServer(function(input, output, session) {
 

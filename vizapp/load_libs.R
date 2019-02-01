@@ -1,10 +1,10 @@
 options("repos"="http://cran.rstudio.com/")
 update.packages()
 
-install.packages("sqldf",dep=TRUE)
+#install.packages("sqldf",dep=TRUE)
 install.packages("gmp",dep=TRUE)
 install.packages("shinythemes",dep=TRUE)
-install.packages(c('gplots','lattice','latticeExtra','vegan','labdsv','cluster','ggplot2'))
+install.packages(c('gplots','lattice','latticeExtra','vegan','labdsv','cluster','ggplot2',"tidyverse"))
 install.packages("Vennerable", repos="http://R-Forge.R-project.org",type='source')
 source("http://bioconductor.org/biocLite.R")
 biocLite(c('graph', 'RBGL', 'RColorBrewer', 'reshape', 'gtools',"edgeR", "DESeq2","qusage","ballgown"))
