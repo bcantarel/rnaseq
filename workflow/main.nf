@@ -177,13 +177,13 @@ process geneabund {
   publishDir "$params.output", mode: 'copy'
   input:
   set pair_id, file(sbam) from deduped1
-  file gtf_file
   output:
   file("${pair_id}.cts")  into counts
+  file("${pair_id}.cts.summary")  into ctsum
   file("${pair_id}_stringtie") into strcts
   file("${pair_id}.fpkm.txt") into fpkm
   """
-  bash $baseDir/process_scripts/diff_exp/geneabundance.sh -s $params.stranded -g ${gtf_file} -p ${pair_id} -b ${sbam}
+  bash $baseDir/process_scripts/genect_rnaseq/geneabundance.sh -s $params.stranded -g ${gtf_file} -p ${pair_id} -b ${sbam}
   """
 }
 
@@ -192,6 +192,7 @@ process statanal {
   publishDir "$params.output", mode: 'copy'
   input:
   file count_file from counts.toList()
+  file count_sum from ctsum.toList()
   file newdesign name 'design.txt'
   file genenames
   file geneset name 'geneset.gmt'
@@ -204,24 +205,8 @@ process statanal {
   file("geneset.shiny.gmt") into gmtfile
   when:
   script:
-  if (params.dea == 'skip')
   """
-  perl $baseDir/scripts/concat_cts.pl -o ./ *.cts
-  perl $baseDir/scripts/concat_fpkm.pl -o ./ *.fpkm.txt
-  touch empty.png
-  touch bg.rda
-  cp geneset.gmt geneset.shiny.gmt
-  """
-  else
-  """
-  module load R/3.2.1-intel
-  perl $baseDir/scripts/concat_cts.pl -o ./ *.cts
-  cp design.txt design.shiny.txt
-  cp geneset.gmt geneset.shiny.gmt
-  Rscript  $baseDir/scripts/dea.R
-  Rscript $baseDir/scripts/build_ballgown.R *_stringtie
-  perl $baseDir/scripts/concat_edgeR.pl *.edgeR.txt
-  perl $baseDir/scripts/concat_fpkm.pl -o ./ *.fpkm.txt
+  bash $baseDir/process_scripts/genect_rnaseq/statanal.sh
   """
 }
 process gatkbam {
