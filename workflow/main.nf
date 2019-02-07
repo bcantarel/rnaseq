@@ -201,7 +201,7 @@ process statanal {
    output:
   file "*.txt" into txtfiles
   file "*.png" into psfiles
-  file("bg.rda") into rdafiles
+  file("*.rda") into rdafiles
   file("geneset.shiny.gmt") into gmtfile
   when:
   script:
