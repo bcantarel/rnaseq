@@ -206,7 +206,7 @@ process statanal {
   when:
   script:
   """
-  bash $baseDir/process_scripts/genect_rnaseq/statanal.sh
+  bash $baseDir/process_scripts/genect_rnaseq/statanal.sh -d $params.dea
   """
 }
 process gatkbam {
