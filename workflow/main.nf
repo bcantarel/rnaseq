@@ -6,7 +6,7 @@ params.output= "$baseDir/output"
 params.fastqs="$params.input/*.fastq.gz"
 params.design="$params.input/design.txt"
 
-params.genome="/project/shared/bicf_workflow_ref/GRCh38/"
+params.genome="/project/shared/bicf_workflow_ref/human/GRCh38/"
 params.markdups="picard"
 params.stranded="0"
 params.pairs="pe"
@@ -20,7 +20,8 @@ fastqs=file(params.fastqs)
 design_file = file(params.design)
 gtf_file = file("$params.genome/gencode.gtf")
 genenames = file("$params.genome/genenames.txt")
-geneset = file("$params.genome/gsea_gmt/$params.geneset")
+
+geneset = file("$params.genome/../gsea_gmt/$params.geneset")
 dbsnp="$params.genome/dbSnp.vcf.gz"
 indel="$params.genome/GoldIndels.vcf.gz"
 knownindel=file(indel)
