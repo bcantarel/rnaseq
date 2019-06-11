@@ -1,9 +1,6 @@
 # Gitlab CI Script for astrocyte/rnaseq
 # Brandi L. Cantarel - 2017
 
-variables:
-  GIT_SUBMODULE_STRATEGY: recursive
-
 before_script:
   - module load nextflow/0.31.0
   - git submodule sync --recursive
