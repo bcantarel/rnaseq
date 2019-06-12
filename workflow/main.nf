@@ -3,10 +3,41 @@
 // Default parameter values to run tests
 params.input = "$baseDir"
 params.output= "$baseDir/output"
-params.fastqs="$params.input/*.fastq.gz"
-params.design="$params.input/design.txt"
 
-params.genome="/project/shared/bicf_workflow_ref/human/GRCh38/"
+params.files="$params.input/*.f*"
+files=Channel.fromPath(params.files)
+
+process checkinputfiles {
+
+  input:
+
+  file fqs from files
+
+  output:
+
+  file("*.fastq.gz") into fastqs
+
+  script:
+
+  """
+  if [[ $fqs == *.fq ]];
+    then new_name=`echo ${fqs} | sed -e "s/.fq\$/.fastq/"`;
+    mv ${fqs} \${new_name};
+    gzip -f \${new_name};
+  elif [[ $fqs == *.fastq ]];
+    then gzip -f $fqs;
+  elif [[ $fqs == *.fq.gz ]];
+    then new_name=`echo ${fqs} | sed -e "s/.fq.gz\$/.fastq.gz/"`;
+    mv ${fqs} \${new_name};
+  else
+    zcat ${fqs} | gzip -c > ${fqs}.temp
+    mv ${fqs}.temp ${fqs}
+  fi;
+  """
+}
+
+params.design="$params.input/design.txt"
+params.genome="/project/shared/bicf_workflow_ref/human/grch38/"
 params.markdups="picard"
 params.stranded="0"
 params.pairs="pe"
@@ -16,14 +47,13 @@ params.fusion = 'skip'
 params.dea = 'detect'
 
 design_file = file(params.design)
-fastqs=file(params.fastqs)
 design_file = file(params.design)
 gtf_file = file("$params.genome/gencode.gtf")
 genenames = file("$params.genome/genenames.txt")
 
 geneset = file("$params.genome/../gsea_gmt/$params.geneset")
-dbsnp="$params.genome/dbSnp.vcf.gz"
-indel="$params.genome/GoldIndels.vcf.gz"
+dbsnp="$params.genome/dbsnp.vcf.gz"
+indel="$params.genome/goldindels.vcf.gz"
 knownindel=file(indel)
 dbsnp=file(dbsnp)
 
@@ -64,7 +94,7 @@ spltnames
 else {
 spltnames
  .splitCsv()
- .filter { fileMap.get(it[1]) != null }
+ .filter { fleMap.get(it[1]) != null }
  .map { it -> tuple(it[0], fileMap.get(it[1]),'') }
  .set { read }
 }
