@@ -55,9 +55,9 @@ while (my $line = <DFILE>) {
 	$hash{SampleGroup} = $grp[$j];
     }
     $hash{SampleGroup} =~ s/_//g;
-    unless ($hash{FqR1} =~ m/.fastq.gz/) {
+    unless ($hash{FqR1} =~ m/_good.fastq.gz/) {
         my $name = $hash{FqR1};
-        $name =~ s/.f.*/.fastq.gz/;
+        $name =~ s/.f.*/_good.fastq.gz/;
         unless ($hash{FqR1} eq $name) {
 	    $hash{FqR1} = $name;
             unless (-e ($name)) {
@@ -68,7 +68,7 @@ while (my $line = <DFILE>) {
     $hash{FqR2} = 'na' unless ($hash{FqR2});
     unless ($hash{FqR2} eq 'na') {
         my $name = $hash{FqR2};
-        $name =~ s/.f.*/.fastq.gz/;
+        $name =~ s/.f.*/_good.fastq.gz/;
         unless ($hash{FqR2} eq $name) {
 	    $hash{FqR2} = $name;
             unless (-e ($name)) {
