@@ -6,9 +6,8 @@ variables:
 
 before_script:
   - module load nextflow/0.31.0
-  - rm -rf /workflow/process_scripts
-  - git submodule update --init --recursive
   - git submodule sync --recursive
+  - git submodule update --init --recursive
 
 stages:
   - integration
