@@ -54,15 +54,14 @@ while (my $line = <DFILE>) {
 	my $j = $lnct %% 2;
 	$hash{SampleGroup} = $grp[$j];
     }
+    $lnct ++;
     $hash{SampleGroup} =~ s/_//g;
     unless ($hash{FqR1} =~ m/_good.fastq.gz/) {
         my $name = $hash{FqR1};
         $name =~ s/.f.*/_good.fastq.gz/;
         unless ($hash{FqR1} eq $name) {
 	    $hash{FqR1} = $name;
-            unless (-e ($name)) {
-                    die "Unable to find fastq read 1\n${name}\n";
-            }
+	     next unless (-e ($name));
 	}
     }
     $hash{FqR2} = 'na' unless ($hash{FqR2});
@@ -71,9 +70,7 @@ while (my $line = <DFILE>) {
         $name =~ s/.f.*/_good.fastq.gz/;
         unless ($hash{FqR2} eq $name) {
 	    $hash{FqR2} = $name;
-            unless (-e ($name)) {
-                    die "Unable to find fastq read 2\n${name}\n";
-            }
+	     next unless (-e ($name));
 	}
     }
     my @line;
@@ -82,5 +79,4 @@ while (my $line = <DFILE>) {
     }
     print OUT join("\t",@line),"\n";
     print join(",",$hash{SampleID},$hash{FqR1},$hash{FqR2}),"\n";
-    $lnct ++;
 }
