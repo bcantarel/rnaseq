@@ -1,6 +1,9 @@
 #!/usr/bin/perl -w
 #check_designfile.pl
 
+use strict;
+use warnings;
+
 my $pe = shift @ARGV;
 my $dfile = shift @ARGV;
 open OUT, ">design.valid.txt" or die $!;
@@ -10,7 +13,6 @@ chomp($head);
 $head =~ s/FullPathTo//g;
 my @colnames = split(/\t/,$head);
 my %newcols = map {$_=> 1} @colnames;
-
 
 unless (grep(/FqR1/,@colnames)) {
     die "Missing Sequence Files in Design File: FqR1\n";
@@ -49,16 +51,32 @@ while (my $line = <DFILE>) {
     $hash{FinalBam} = $hash{SampleID}.".final.bam";
     $hash{Bam} = $hash{SampleID}.".bam";
     unless ($hash{SampleGroup}) {
-	$j = $lnct %% 2;
+	my $j = $lnct %% 2;
 	$hash{SampleGroup} = $grp[$j];
     }
+    $lnct ++;
     $hash{SampleGroup} =~ s/_//g;
+    unless ($hash{FqR1} =~ m/_good.fastq.gz/) {
+        my $name = $hash{FqR1};
+        $name =~ s/.f.*/_good.fastq.gz/;
+        unless ($hash{FqR1} eq $name) {
+	    $hash{FqR1} = $name;
+	     next unless (-e ($name));
+	}
+    }
+    $hash{FqR2} = 'na' unless ($hash{FqR2});
+    unless ($hash{FqR2} eq 'na') {
+        my $name = $hash{FqR2};
+        $name =~ s/.f.*/_good.fastq.gz/;
+        unless ($hash{FqR2} eq $name) {
+	    $hash{FqR2} = $name;
+	     next unless (-e ($name));
+	}
+    }
     my @line;
-    foreach $f (@cols) {
+    foreach my $f (@cols) {
 	push @line, $hash{$f};
     }
     print OUT join("\t",@line),"\n";
-    $hash{FqR2} = 'na' unless ($hash{FqR2});
     print join(",",$hash{SampleID},$hash{FqR1},$hash{FqR2}),"\n";
-    $lnct ++;
 }
