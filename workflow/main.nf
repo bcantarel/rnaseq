@@ -74,6 +74,7 @@ if( ! read ) { error "Didn't match any input files with entries in the design fi
 
 // Trim raw reads using trimgalore
 process trim {
+        errorStrategy 'ignore'
 
 	input:
 	set pair_id, file(read1), file(read2) from read
@@ -94,6 +95,7 @@ process trim {
 // Alignment stats with samtools
 
 process starfusion {
+        errorStrategy 'ignore'
         publishDir "$params.output", mode: 'copy'
 
         input:
@@ -112,6 +114,7 @@ process starfusion {
 }
 
 process align {
+        errorStrategy 'ignore'
         publishDir "$params.output", mode: 'copy'
 
         input:
@@ -129,6 +132,7 @@ process align {
 }
 
 process alignqc {
+        errorStrategy 'ignore'
         publishDir "$params.output", mode: 'copy'
 
         input:
@@ -184,6 +188,7 @@ process markdups {
 // Assemble transcripts with stringtie
 
 process geneabund {
+        errorStrategy 'ignore'
         publishDir "$params.output", mode: 'copy'
 
         input:
@@ -202,6 +207,7 @@ process geneabund {
 }
 
 process statanal {
+        errorStrategy 'ignore'
         publishDir "$params.output", mode: 'copy'
 
         input:
@@ -226,6 +232,7 @@ process statanal {
 }
 
 process gatkbam {
+        errorStrategy 'ignore'
         publishDir "$params.output", mode: 'copy'
 
         input:
