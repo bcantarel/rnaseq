@@ -19,7 +19,7 @@ description: |
   This is a workflow package for the BioHPC/BICF RNASeq workflow system.
   It implements differential expression analysis, gene set enrichment analysis,
   gene fusion analysis and variant identification using RNASeq data.
-  
+
 
 # -----------------------------------------------------------------------------
 # DOCUMENTATION
@@ -88,7 +88,7 @@ workflow_parameters:
     type: files
     required: true
     description: |
-      One or more input paired-end FASTQ files from a RNASeq experiment and a design file with the link between the same name and the sample group
+      One or more input paired-end FASTQ files from a RNASeq experiment
     regex: ".*(fastq|fq)*"
     min: 1
 
@@ -101,7 +101,7 @@ workflow_parameters:
       - [ '2', 'Reverse Stranded']
     description: |
       In the case that the sequence libraries where generated using a stranded specific protocol.
-      
+
   - id: pairs
     type: select
     required: true
@@ -119,7 +119,7 @@ workflow_parameters:
       - [ 'star', 'STAR']
     description: |
       Alignment tool
-      
+
   - id: fusion
     type: select
     required: true
@@ -174,7 +174,7 @@ workflow_parameters:
       - ['c5.all.v5.1.entrez.gmt','Gene Ontology Gene Sets']
       - ['c6.all.v5.1.symbols.gmt','Oncogenic Signatures']
       - ['c7.all.v5.1.entrez.gmt','Immunological Signatures']
-      
+
     required: true
     description: |
       Gene Set Definitions used for QuSAGE Analysis -- see http://software.broadinstitute.org/gsea/msigdb/ for geneset descriptions
