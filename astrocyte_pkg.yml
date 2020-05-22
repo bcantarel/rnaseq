@@ -168,12 +168,12 @@ workflow_parameters:
   - id: geneset
     type: select
     choices:
-      - ['h.all.v5.1.symbols.gmt','Hallmark Gene Sets']
+      - ['h.all.v6.2.symbols.gmt','Hallmark Gene Sets']
       - ['c2.all.v5.1.symbols.gmt','Curated Gene Sets']
       - ['c3.all.v5.1.symbols.gmt','Motif Gene Sets']
-      - ['c5.all.v5.1.entrez.gmt','Gene Ontology Gene Sets']
+      - ['c5.all.v6.2.symbols.gmt','Gene Ontology Gene Sets']
       - ['c6.all.v5.1.symbols.gmt','Oncogenic Signatures']
-      - ['c7.all.v5.1.entrez.gmt','Immunological Signatures']
+      - ['c7.all.v5.1.symbols.gmt','Immunological Signatures']
 
     required: true
     description: |
