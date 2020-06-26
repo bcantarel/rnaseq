@@ -1,3 +1,3 @@
 [submodule "workflow/process_scripts"]
 	path = workflow/process_scripts
-	url = https://git.biohpc.swmed.edu/ngsclialab/process_scripts.git
+	url = git@git.biohpc.swmed.edu:ngsclialab/process_scripts.git
