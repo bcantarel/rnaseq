@@ -61,13 +61,13 @@ if (params.pairs == 'pe') {
   spltnames
   .splitCsv()
   .filter { fileMap.get(it[1]) != null & fileMap.get(it[2]) != null }
-  .map { it -> tuple(it[0], fileMap.get(it[1]), fileMap.get(it[2])) }
+  .map { it -> tuple(it[0], [fileMap.get(it[1]), fileMap.get(it[2])]) }
   .set { read }
 } else {
   spltnames
   .splitCsv()
   .filter { fileMap.get(it[1]) != null }
-  .map { it -> tuple(it[0], fileMap.get(it[1]),'') }
+  .map { it -> tuple(it[0], [fileMap.get(it[1])]) }
   .set { read }
 }
 if( ! read ) { error "Didn't match any input files with entries in the design file" }
@@ -76,13 +76,13 @@ if( ! read ) { error "Didn't match any input files with entries in the design fi
 process trim {
   errorStrategy 'ignore'
   input:
-  set pair_id, file(read1), file(read2) from read
+  set pair_id, file(fqs) from read
   output:
   set pair_id, file("${pair_id}.trim.R1.fastq.gz"),file("${pair_id}.trim.R2.fastq.gz") into trimread
   set pair_id, file("${pair_id}.trim.R1.fastq.gz"),file("${pair_id}.trim.R2.fastq.gz") into fusionfq
   script:
   """
-  bash $baseDir/process_scripts/preproc_fastq/trimgalore.sh -p ${pair_id} -a ${read1} -b ${read2}
+  bash $baseDir/process_scripts/preproc_fastq/trimgalore.sh -f -p ${pair_id} ${fqs}
   """
 }
 
