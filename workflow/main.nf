@@ -61,13 +61,13 @@ if (params.pairs == 'pe') {
   spltnames
   .splitCsv()
   .filter { fileMap.get(it[1]) != null & fileMap.get(it[2]) != null }
-  .map { it -> tuple(it[0], [fileMap.get(it[1]), fileMap.get(it[2])]) }
+  .map { it -> tuple(it[0], ([fileMap.get(it[1]), fileMap.get(it[2])])) } 
   .set { read }
 } else {
   spltnames
   .splitCsv()
   .filter { fileMap.get(it[1]) != null }
-  .map { it -> tuple(it[0], [fileMap.get(it[1])]) }
+  .map { it -> tuple(it[0], ([fileMap.get(it[1])])) }
   .set { read }
 }
 if( ! read ) { error "Didn't match any input files with entries in the design file" }
@@ -78,31 +78,10 @@ process trim {
   input:
   set pair_id, file(fqs) from read
   output:
-  set pair_id, file("${pair_id}.trim.R1.fastq.gz"),file("${pair_id}.trim.R2.fastq.gz") into trimread
-  set pair_id, file("${pair_id}.trim.R1.fastq.gz"),file("${pair_id}.trim.R2.fastq.gz") into fusionfq
+  set pair_id, file("${pair_id}.trim.R*.fastq.gz") into trimread
   script:
   """
   bash $baseDir/process_scripts/preproc_fastq/trimgalore.sh -f -p ${pair_id} ${fqs}
-  """
-}
-
-// Align trimmed reads to genome indes with hisat2
-// Sort and index with samtools
-// QC aligned reads with fastqc
-// Alignment stats with samtools
-
-process starfusion {
-  errorStrategy 'ignore'
-  publishDir "$params.output", mode: 'copy'
-  input:
-  set pair_id, file(fq1), file(fq2) from fusionfq
-  output:
-  file("${pair_id}.starfusion.txt") into fusionout
-  when:
-  params.fusion == 'detect' && params.pairs == 'pe'
-  script:
-  """
-  bash $baseDir/process_scripts/alignment/starfusion.sh -p ${pair_id} -r ${index_path} -a ${fq1} -b ${fq2} -m trinity -f
   """
 }
 
@@ -110,14 +89,14 @@ process align {
   errorStrategy 'ignore'
   publishDir "$params.output", mode: 'copy'
   input:
-  set pair_id, file(fq1), file(fq2) from trimread
+  set pair_id, file(fqs) from trimread
   output:
   set pair_id, file("${pair_id}.bam") into aligned
   set pair_id, file("${pair_id}.bam") into aligned2
   file("${pair_id}.alignerout.txt") into hsatout
   script:
   """
-  bash $baseDir/process_scripts/alignment/rnaseqalign.sh -a $params.align -p ${pair_id} -r ${index_path} -x ${fq1} -y ${fq2}
+  bash $baseDir/process_scripts/alignment/rnaseqalign.sh -a $params.align -p ${pair_id} -r ${index_path} ${fqs}
   """
 }
 
@@ -135,23 +114,7 @@ process alignqc {
   """
 }
 
-// Summarize all flagstat output
-
-process parse_alignstat {
-  publishDir "$params.output", mode: 'copy'
-  input:
-  file(txt) from alignstats.toList()
-  file(txt) from  hsatout.toList()
-  output:
-  file('alignment.summary.txt')
-  script:
-  """
-  perl $baseDir/scripts/parse_flagstat.pl *.flagstat.txt
-  """
-}
-
 // Identify duplicate reads with Picard
-
 process markdups {
   publishDir "$params.output", mode: 'copy'
   input:
@@ -167,7 +130,6 @@ process markdups {
 
 // Read summarization with subread
 // Assemble transcripts with stringtie
-
 process geneabund {
   errorStrategy 'ignore'
   publishDir "$params.output", mode: 'copy'
