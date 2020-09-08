@@ -23,6 +23,11 @@ indel="$params.genome/GoldIndels.vcf.gz"
 knownindel=file(indel)
 dbsnp=file(dbsnp)
 
+repoDir=workflow.projectDir
+if (params.repoDir) {
+   repoDir=params.repoDir
+}
+
 // params genome is the directory
 // base name for the index is always genome
 index_path = file(params.genome)
@@ -75,18 +80,20 @@ if( ! read ) { error "Didn't match any input files with entries in the design fi
 // Trim raw reads using trimgalore
 process trim {
   errorStrategy 'ignore'
+  label 'trim'
   input:
   set pair_id, file(fqs) from read
   output:
   set pair_id, file("${pair_id}.trim.R*.fastq.gz") into trimread
   script:
   """
-  bash $baseDir/process_scripts/preproc_fastq/trimgalore.sh -f -p ${pair_id} ${fqs}
+  bash $repoDir/process_scripts/preproc_fastq/trimgalore.sh -f -p ${pair_id} ${fqs}
   """
 }
 
-process align {
+process ralign {
   errorStrategy 'ignore'
+  label 'ralign'
   publishDir "$params.output", mode: 'copy'
   input:
   set pair_id, file(fqs) from trimread
@@ -96,12 +103,13 @@ process align {
   file("${pair_id}.alignerout.txt") into hsatout
   script:
   """
-  bash $baseDir/process_scripts/alignment/rnaseqalign.sh -a $params.align -p ${pair_id} -r ${index_path} ${fqs}
+  bash $repoDir/process_scripts/alignment/rnaseqalign.sh -a $params.align -p ${pair_id} -r ${index_path} ${fqs}
   """
 }
 
 process alignqc {
   errorStrategy 'ignore'
+  label 'profiling_qc'
   publishDir "$params.output", mode: 'copy'
   input:
   set pair_id, file(bam) from aligned2
@@ -110,13 +118,14 @@ process alignqc {
   set file("${pair_id}_fastqc.zip"),file("${pair_id}_fastqc.html") into fastqc
   script:
   """
-  bash $baseDir/process_scripts/alignment/bamqc.sh -p ${pair_id} -b ${bam} -y rna
+  bash $repoDir/process_scripts/alignment/bamqc.sh -p ${pair_id} -b ${bam} -y rna
   """
 }
 
 // Identify duplicate reads with Picard
 process markdups {
   publishDir "$params.output", mode: 'copy'
+  label 'dnaalign'
   input:
   set pair_id, file(sbam) from aligned
   output:
@@ -124,7 +133,7 @@ process markdups {
   set pair_id, file("${pair_id}.dedup.bam") into deduped2
   script:
   """
-  bash $baseDir/process_scripts/alignment/markdups.sh -a $params.markdups -b $sbam -p $pair_id
+  bash $repoDir/process_scripts/alignment/markdups.sh -a $params.markdups -b $sbam -p $pair_id
   """
 }
 
@@ -132,6 +141,7 @@ process markdups {
 // Assemble transcripts with stringtie
 process geneabund {
   errorStrategy 'ignore'
+  label 'geneabund'
   publishDir "$params.output", mode: 'copy'
   input:
   set pair_id, file(sbam) from deduped1
@@ -142,7 +152,7 @@ process geneabund {
   file("${pair_id}.fpkm.txt") into fpkm
   script:
   """
-  bash $baseDir/process_scripts/genect_rnaseq/geneabundance.sh -s $params.stranded -g ${gtf_file} -p ${pair_id} -b ${sbam}
+  bash $repoDir/process_scripts/genect_rnaseq/geneabundance.sh -s $params.stranded -g ${gtf_file} -p ${pair_id} -b ${sbam}
   """
 }
 
