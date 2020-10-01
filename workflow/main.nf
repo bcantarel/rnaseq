@@ -34,23 +34,18 @@ index_path = file(params.genome)
 
 process checkdesignfile {
 	queue 'super'
-	module 'parallel/20150122:pigz/2.4'
+	label 'trim'
 	publishDir "$params.output", mode: 'copy'
-
 	input:
         file design_file name 'design.ori.txt'
 	file ("*") from fqs.collect()
-
 	output:
 	file("design.valid.txt") into newdesign
 	file("*.fastq.gz") into fastqs mode flatten
 	stdout spltnames
-
 	script:
 	"""
-	bash $baseDir/scripts/check_inputfiles.sh 
-	perl -p -e 's/\\r\\n*/\\n/g' design.ori.txt > design.fix.txt
-	perl $baseDir/scripts/check_designfile.pl ${params.pairs} design.fix.txt
+	bash $repoDir/process_scripts/design_file/checkdesignfile.sh ${params.pairs} design.ori.txt
 	"""
 }
 
@@ -159,6 +154,7 @@ process geneabund {
 process statanal {
   errorStrategy 'ignore'
   publishDir "$params.output", mode: 'copy'
+  label 'rnaseqstat'
   input:
   file count_file from counts.toList()
   file count_sum from ctsum.toList()
