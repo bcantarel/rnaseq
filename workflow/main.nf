@@ -170,6 +170,6 @@ process statanal {
   file("geneset.shiny.gmt") into gmtfile
   script:
   """
-  bash $baseDir/process_scripts/genect_rnaseq/statanal.sh -d $params.dea
+  bash $repoDir/process_scripts/genect_rnaseq/statanal.sh -d $params.dea
   """
 }
