@@ -161,6 +161,7 @@ workflow_parameters:
       - [ '/project/shared/bicf_workflow_ref/human/GRCh38', 'Human GRCh38']
       - [ '/project/shared/bicf_workflow_ref/human/GRCh37', 'Human GRCh37']
       - [ '/project/shared/bicf_workflow_ref/mouse/GRCm38', 'Mouse GRCm38']
+      - [ '/project/shared/bicf_workflow_ref/mouse/GRCm39', 'Mouse GRCm39']
     required: true
     description: |
       Reference genome for alignment
