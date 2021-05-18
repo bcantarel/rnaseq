@@ -2,7 +2,8 @@
 # Brandi L. Cantarel - 2017
 
 before_script:
-  - module load nextflow/0.31.0
+  - module load nextflow/20.01.0
+  - module load singularity/3.0.2
   - git submodule sync --recursive
   - git submodule update --init --recursive
 
@@ -12,13 +13,13 @@ stages:
 test_human:
   stage: integration
   script:
-    - nextflow run -with-dag flowchart.png -with-timeline human_timeline.html -with-report human_report.html workflow/main.nf --design  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/design.rnaseq.txt --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --output human_output
+    - nextflow run -c nextflow.config -with-dag flowchart.png -with-timeline human_timeline.html -with-report human_report.html workflow/main.nf --design  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/design.rnaseq.txt --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --output human_output
   artifacts:
     expire_in: 2 days
 
 test_mouse:
   stage: integration
   script:
-    - nextflow run -with-dag flowchart.png -with-timeline mouse_timeline.html -with-report mouse_report.html  workflow/main.nf --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --design /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/mouse/GRCm38 --markdups null --output mouse_output
+    - nextflow run nextflow.config -with-dag flowchart.png -with-timeline mouse_timeline.html -with-report mouse_report.html  workflow/main.nf --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --design /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/mouse/GRCm38 --markdups null --output mouse_output
   artifacts:
     expire_in: 2 days
