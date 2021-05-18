@@ -21,6 +21,6 @@ test_human:
 test_mouse:
   stage: integration
   script:
-    - nextflow run nextflow.config -with-dag flowchart.png -with-timeline mouse_timeline.html -with-report mouse_report.html  workflow/main.nf --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --design /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/mouse/GRCm38 --markdups null --output mouse_output
+    - nextflow run -c nextflow.config -with-dag flowchart.png -with-timeline mouse_timeline.html -with-report mouse_report.html  workflow/main.nf --input  /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq --design /project/shared/bicf_workflow_ref/workflow_testdata/rnaseq/mouse_se.design.txt --pairs se --fusion skip --genome /project/shared/bicf_workflow_ref/mouse/GRCm38 --markdups null --output mouse_output
   artifacts:
     expire_in: 2 days
