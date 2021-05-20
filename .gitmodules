@@ -1,3 +1,0 @@
-[submodule "workflow/process_scripts"]
-	path = workflow/process_scripts
-	url = ../../../ngsclialab/process_scripts.git
