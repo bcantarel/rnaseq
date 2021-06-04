@@ -18,12 +18,16 @@ module load nextflow/20.01.0 singularity/3.5.3
 
 The design file must named design.txt and be in tab seperated format for the workflows. All RNA workflows can be run usin the same design file format.  You can run in single-end mode with blank cells in the FqR2 column.
 
-| SampleID | CaseID | FqR1 | FqR2 |
-|---|---|---|---|
-| Sample1 | Fam1 | Sample1.R1.fastq.gz | Sample1.R2.fastq.gz |
-| Sample2 | Fam1 | Sample2.R1.fastq.gz | Sample2.R2.fastq.gz |
-| Sample3 | Fam2 | Sample3.R1.fastq.gz | Sample3.R2.fastq.gz |
-| Sample4 | Fam2 | Sample4.R1.fastq.gz | Sample4.R2.fastq.gz |
+| SampleID | SampleGroup | SubjectID | SampleName | FqR1 | FqR2 |
+|---|---|---|---|---|---|
+| SRR1551069 |	monocytes |	53 |	53_Monocytes |	SRR1551069_1.fastq.gz |	SRR1551069_2.fastq.gz |
+| SRR1551068 | neutrophils |	53 |	53_Neutrophils |	SRR1551068_1.fastq.gz	|	SRR1551068_2.fastq.gz |
+| SRR1551055 | monocytes |	21 |	21_Monocytes |	SRR1551055_1.fastq.gz |	SRR1551055_2.fastq.gz |
+| SRR1551054 | neutrophils |	21 |	21_Neutrophils |	SRR1551054_1.fastq.gz	|	SRR1551054_2.fastq.gz |
+| SRR1551048 |	monocytes |	20 |	20_Monocytes |	SRR1551048_1.fastq.gz	|	SRR1551048_2.fastq.gz |
+| SRR1551047 |	neutrophils |	20 |	20_Neutrophils |	SRR1551047_1.fastq.gz	|	SRR1551047_2.fastq.gz |
+| SRR1550987 |	monocytes |	44 |	44_Monocytes |	SRR1550987_1.fastq.gz	|	SRR1550987_2.fastq.gz |
+| SRR1550986 |	neutrophils |	44 |	44_Neutrophils |	SRR1550986_1.fastq.gz	|	SRR1550986_2.fastq.gz |
 
 
 ### RNA Parameters
